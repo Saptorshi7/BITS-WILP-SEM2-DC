@@ -73,7 +73,7 @@ while True:
                             file_content = response["result"]
                             with open(file_name, "wb") as f:
                                 f.write(file_content.encode())
-
+                                print(f"File '{filename}' downloaded successfully from '{response.get("server")}'.")
                     except (ConnectionRefusedError, socket.timeout):
                         # If connection to second server fails or timeout occurs, return file not found
                         response = {"error": "File not found"}
