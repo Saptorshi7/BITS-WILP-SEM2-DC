@@ -74,7 +74,7 @@ while True:
 
                     except (ConnectionRefusedError, socket.timeout):
                         # If connection to second server fails or timeout occurs, return file not found
-                        response = {"error": "File not found or server unreachable"}
+                        response = {"error": "File not found"}
 
                     finally:
                         second_server_socket.close()
