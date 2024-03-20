@@ -2,7 +2,7 @@ import socket
 import json
 
 # Define the server address and port
-server_address = ('172.31.15.189', 12345)
+server_address = ('172.31.13.155', 12345)
 buffer_size = 1024
 
 # Create a TCP/IP socket
@@ -18,7 +18,8 @@ try:
     # Define a JSON-RPC request for downloading the specified file
     request = {
         "method": "download",
-        "params": {"filename": filename}
+        "params": {"filename": filename},
+        "origin": 0
     }
 
     # Send JSON-RPC request to the server
