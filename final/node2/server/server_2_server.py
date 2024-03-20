@@ -47,6 +47,7 @@ while True:
                 with open(file_name, "wb") as f:
                     f.write(file_content.encode())
                 response = {"result": "File uploaded successfully"}
+
             elif method == "download":
                 file_name = params.get("filename")
                 if os.path.exists(file_name):
@@ -70,10 +71,11 @@ while True:
 
                         # Save a copy of the file received from server 2 locally
                         if "result" in response:
+                            host = response.get("server")
                             file_content = response["result"]
                             with open(file_name, "wb") as f:
                                 f.write(file_content.encode())
-                                print(f"File '{filename}' downloaded successfully from '{response.get("server")}'.")
+                            print(f"File downloaded successfully from '{host}'.")
                     except (ConnectionRefusedError, socket.timeout):
                         # If connection to second server fails or timeout occurs, return file not found
                         response = {"error": "File not found"}
