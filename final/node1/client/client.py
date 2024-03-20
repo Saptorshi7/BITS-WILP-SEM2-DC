@@ -2,7 +2,7 @@ import socket
 import json
 
 # Define the server address and port
-server_address = ('172.31.15.189', 12345)
+server_address = ('172.31.8.214', 12345)
 buffer_size = 1024
 
 # Create a TCP/IP socket
@@ -32,12 +32,13 @@ try:
     response = json.loads(data.decode())
     result = response.get("result")
     error = response.get("error")
+    host = response.get("server")
 
     # If the result contains file content, save it to a local file
     if result:
         with open(filename, "wb") as f:
             f.write(result.encode())
-        print(f"File '{filename}' downloaded successfully.")
+        print(f"File '{filename}' downloaded successfully from '{host}'.")
     elif error:
         print("Error:", error)
 

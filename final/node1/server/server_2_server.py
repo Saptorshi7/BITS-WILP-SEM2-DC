@@ -3,8 +3,8 @@ import json
 import os
 
 # Define the server address and port
-server_address = ('172.31.15.189', 12345)
-second_server_address = ('172.31.13.155', 12345)  # Address of the second server
+server_address = ('172.31.8.214', 12345)
+second_server_address = ('172.31.7.156', 12345)  # Address of the second server
 buffer_size = 1024
 timeout_seconds = 5  # Timeout for connection and response in seconds
 
@@ -16,6 +16,8 @@ server_socket.bind(server_address)
 
 # Listen for incoming connections
 server_socket.listen(1)
+
+hostname = socket.gethostname()
 
 print("Waiting for a connection...")
 
@@ -50,7 +52,7 @@ while True:
                 if os.path.exists(file_name):
                     with open(file_name, "rb") as f:
                         file_content = f.read().decode()
-                    response = {"result": file_content}
+                    response = {"result": file_content,"server": hostname}
                 elif origin < 3:  # Check origin to prevent loop
                     try:
                         # Try connecting to the second server with timeout

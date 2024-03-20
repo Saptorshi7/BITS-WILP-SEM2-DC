@@ -3,7 +3,7 @@ import json
 import os
 
 # Define the server address and port
-server_address = ('172.31.15.189', 12345)
+server_address = ('172.31.8.214', 12345)
 buffer_size = 1024
 
 def transmit_files(directory):
