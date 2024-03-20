@@ -7,7 +7,6 @@ server_address = ('172.31.15.189', 12345)
 second_server_address = ('172.31.13.155', 12345)  # Address of the second server
 buffer_size = 1024
 timeout_seconds = 5  # Timeout for connection and response in seconds
-server = "172.31.15.189"
 
 # Create a TCP/IP socket
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
