@@ -6,6 +6,8 @@ import os
 server_address = ('172.31.15.189', 12345)
 second_server_address = ('172.31.13.155', 12345)  # Address of the second server
 buffer_size = 1024
+timeout_seconds = 5  # Timeout for connection and response in seconds
+server = "172.31.15.189"
 
 # Create a TCP/IP socket
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -35,6 +37,7 @@ while True:
             request = json.loads(data.decode())
             method = request.get("method")
             params = request.get("params")
+            origin = request.get("origin")
 
             # Process the RPC request
             if method == "upload":
@@ -49,23 +52,36 @@ while True:
                     with open(file_name, "rb") as f:
                         file_content = f.read().decode()
                     response = {"result": file_content}
-                else:
-                    # If file not found locally, try downloading from the second server
-                    second_server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    second_server_socket.connect(second_server_address)
+                elif origin < 3:  # Check origin to prevent loop
                     try:
-                        # Send JSON-RPC request to the second server
-                        second_server_socket.sendall(data)
+                        # Try connecting to the second server with timeout
+                        second_server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                        second_server_socket.settimeout(timeout_seconds)
+                        second_server_socket.connect(second_server_address)
+
+                        # Add origin information to request before sending to second server
+                        request["origin"] += 1
+                        second_server_socket.sendall(json.dumps(request).encode())
+
                         # Receive JSON-RPC response from the second server
                         response_data = second_server_socket.recv(buffer_size)
                         response = json.loads(response_data.decode())
+
                         # Save a copy of the file received from server 2 locally
                         if "result" in response:
                             file_content = response["result"]
                             with open(file_name, "wb") as f:
                                 f.write(file_content.encode())
+
+                    except (ConnectionRefusedError, socket.timeout):
+                        # If connection to second server fails or timeout occurs, return file not found
+                        response = {"error": "File not found or server unreachable"}
+
                     finally:
                         second_server_socket.close()
+                else:
+                    response = {"error": "File not found"}  # Prevent loop by returning error
+
             else:
                 response = {"error": "Method not found"}
 
