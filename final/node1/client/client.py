@@ -18,7 +18,8 @@ try:
     # Define a JSON-RPC request for downloading the specified file
     request = {
         "method": "download",
-        "params": {"filename": filename}
+        "params": {"filename": filename},
+        "origin": 0
     }
 
     # Send JSON-RPC request to the server
