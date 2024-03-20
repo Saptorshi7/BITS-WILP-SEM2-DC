@@ -3,8 +3,8 @@ import json
 import os
 
 # Define the server address and port
-server_address = ('172.31.15.189', 12345)
-second_server_address = ('172.31.13.155', 12345)  # Address of the second server
+server_address = ('172.31.2.52', 12345)
+second_server_address = ('172.31.15.189', 12345)  # Address of the second server
 buffer_size = 1024
 timeout_seconds = 5  # Timeout for connection and response in seconds
 
@@ -74,7 +74,7 @@ while True:
 
                     except (ConnectionRefusedError, socket.timeout):
                         # If connection to second server fails or timeout occurs, return file not found
-                        response = {"error": "File not found or server unreachable"}
+                        response = {"error": "File not found"}
 
                     finally:
                         second_server_socket.close()
